@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - SOME_VAR=some_val
+            - SOME_VAR=some_val
+        command: "python main.py"
+        ports:
+            - "...:..."
+        volumes:
+            - .:/app
+        depends_on:
+            - db
+
+    db:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: main
+        command: "psql "
+        volumes:
+            - .pgdata:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
+
+    tests:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        environment:
+            - SOME_VAR=some_val
+        command: "..."
+        ports:
+            - "...:..."
+        volumes:
+            - .:/app
+        depends_on:
+            - db

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            DATABASE_URL: postgresql://root:root@db:5432/account_balances
+#             DATABASE_URL: ${DATABASE_URL}
+        command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-include *
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/app
+        depends_on:
+            - db
+
+    db:  # call it 'test_db' with prepopulated data???
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: account_balances
+        volumes:
+            - .pgdata:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
