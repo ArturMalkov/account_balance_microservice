@@ -1,4 +1,4 @@
-#Avito Trainee Backend 2022 Task
+#Account Balance Microservice Backend
 
 Project
 
