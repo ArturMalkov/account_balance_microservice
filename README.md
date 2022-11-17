@@ -28,60 +28,60 @@ Example response:
     Example request:
     >curl HTTP /1.1 www.pppp.ru
 
-Example response:
->curl HTTP /1.1 www.pppp.ru
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
 
 <ins>Transaction service - Transactions functionality</ins>
 - Money is deposited (using 3rd party services) to the user regular account (*for the first time*) - regular account info is added to the 'user_accounts' table with the funds deposited (reserve account info is added to the 'user_accounts' table as well)
 *OR*
 Money is deposited (using 3rd party services) to the user regular account (*NOT for the first time*) - deposited funds are added to the balance of an existing regular account
 
-Example request:
->curl HTTP /1.1 www.pppp.ru
-
-Example response:
->curl HTTP /1.1 www.pppp.ru
+    Example request:
+    >curl HTTP /1.1 www.pppp.ru
+    
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
 
 - Money transfers between users - funds are added to the balance of a to_user and withdrawn from the balance of a from_user
 
-Example request:
->curl HTTP /1.1 www.pppp.ru
-
-Example response:
->curl HTTP /1.1 www.pppp.ru
+    Example request:
+    >curl HTTP /1.1 www.pppp.ru
+    
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
 
 - Order is placed and money is transferred from user's regular account to the reserve one 
 
-Example request:
->curl HTTP /1.1 www.pppp.ru
-
-Example response:
->curl HTTP /1.1 www.pppp.ru
+    Example request:
+    >curl HTTP /1.1 www.pppp.ru
+    
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
 
 - Order is cancelled and money is transferred back from user's reserve account to the regular one
 
-Example request:
->curl HTTP /1.1 www.pppp.ru
-
-Example response:
->curl HTTP /1.1 www.pppp.ru
+    Example request:
+    >curl HTTP /1.1 www.pppp.ru
+    
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
 
 - Order is delivered and money is transferred from user's reserve account to the company account
 
-Example request:
->curl HTTP /1.1 www.pppp.ru
-
-Example response:
->curl HTTP /1.1 www.pppp.ru
-
+    Example request:
+    >curl HTTP /1.1 www.pppp.ru
+    
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
+    
 <ins>Report service - Reports functionality</ins>
 - Provides .csv report with total revenues for each service rendered in the requested period. 
 
-Example request:
->curl HTTP /1.1 www.pppp.ru
-
-Example response:
->curl HTTP /1.1 www.pppp.ru
+    Example request:
+    >curl HTTP /1.1 www.pppp.ru
+    
+    Example response:
+    >curl HTTP /1.1 www.pppp.ru
 
 
 **OpenAPI documentation (with Swagger UI and more detailed description of API)**:
