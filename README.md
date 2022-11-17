@@ -19,7 +19,15 @@ Technology Stack:
 - Provides user with his/her accounts' (both reserve and regular) info (including balance amount)
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
+    >curl -X 'PATCH' \
+      'http://127.0.0.1:8000/v1/transactions/deposit' \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -d '{
+      "type": "deposit",
+      "amount": 199.99,
+      "to_user_id": 2
+    }'
     
     Example response:
     >curl HTTP /1.1 www.pppp.ru
