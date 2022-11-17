@@ -41,11 +41,47 @@ Technology Stack:
 
     Example request:
     >curl -X 'GET' \
-      'http://127.0.0.1:8000/v1/information/account-transactions/2?page=1&sort_by_amount=false&sort_by_date=false' \
-      -H 'accept: application/json'
+        'http://127.0.0.1:8000/v1/information/account-transactions/2?page=1&sort_by_amount=true&sort_by_date=false' \
+        -H 'accept: application/json'
     
     Example response body:
-    >
+    >[
+        {
+            "description": "Money in the amount of 100000000USD was deposited to user 2 from external services on 2022-11-17 01:44:22.083065.",
+            "date": "2022-11-17T01:44:22.083065",
+            "amount": 100000000,
+            "type": "deposit",
+            "to_user_id": 2
+        },
+        {
+            "description": "Money in the amount of 170000USD was reserved on user 2 reserve account as per the order 2 on 2022-11-17 01:44:28.512439.",
+            "date": "2022-11-17T01:44:28.513439",
+            "amount": 170000,
+            "type": "reserve",
+            "order_id": 2
+        },
+        {
+            "description": "Money in the amount of 170000USD was refunded to user 2 account from his/her reserve account as per the order 2 on 2022-11-17 01:46:55.031078.",
+            "date": "2022-11-17T01:46:55.032078",
+            "amount": 170000,
+            "type": "reserve refund",
+            "order_id": 2
+        },
+        {
+            "description": "Money in the amount of 500USD was transferred from user 1 to user 2 on 2022-11-17 01:37:52.240125.",
+            "date": "2022-11-17T01:37:52.240125",
+            "amount": 500,
+            "type": "funds transfer",
+            "to_user_id": 2
+        },
+        {
+            "description": "Money in the amount of 199.99USD was deposited to user 2 from external services on 2022-11-17 01:26:25.982780.",
+            "date": "2022-11-17T01:26:25.984779",
+            "amount": 199.99,
+            "type": "deposit",
+            "to_user_id": 2
+        }
+    ]
 
 <ins>Transaction service - Transactions functionality</ins>
 - Money is deposited (using 3rd party services) to the user regular account (*for the first time*) - regular account info is added to the 'user_accounts' table with the funds deposited (reserve account info is added to the 'user_accounts' table as well)
