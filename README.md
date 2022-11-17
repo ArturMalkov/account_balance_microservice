@@ -19,15 +19,9 @@ Technology Stack:
 - Provides user with his/her accounts' (both reserve and regular) info (including balance amount)
 
     Example request:
-    >curl -X 'PATCH' \
-      'http://127.0.0.1:8000/v1/transactions/deposit' \
-      -H 'accept: application/json' \
-      -H 'Content-Type: application/json' \
-      -d '{
-      "type": "deposit",
-      "amount": 199.99,
-      "to_user_id": 2
-    }'
+    curl -X 'GET' \
+      'http://127.0.0.1:8000/v1/information/account-balance/2' \
+      -H 'accept: application/json'
     
     Example response:
     >curl HTTP /1.1 www.pppp.ru
@@ -35,8 +29,10 @@ Technology Stack:
 - Provides user with info on all transactions on his/her accounts (both reserve and regular) - a list of transactions with description on where and why the funds were credited/debited from the account balance is provided. Sorting (by date and amount) and pagination of results are provided as an option
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
-
+    curl -X 'GET' \
+      'http://127.0.0.1:8000/v1/information/account-transactions/2?page=1&sort_by_amount=false&sort_by_date=false' \
+      -H 'accept: application/json'
+    
     Example response:
     >curl HTTP /1.1 www.pppp.ru
 
