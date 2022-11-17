@@ -1,16 +1,13 @@
-#Account Balance Microservice Backend
+**Avito Backend 2022 Account Balance Microservice Project**
 
-Project
+Technology Stack:
+- Language: **Python (3.10)**
 
-I just love **black** text
+- Web-framework: **FastAPI**
 
-Language: **Python (3.10)**
+- ORM: **SQLAlchemy**
 
-Web-framework: **FastAPI**
-
-ORM: **SQLAlchemy (async)**
-
-Database: **PostgreSQL**
+- Database: **PostgreSQL**
 
 
 The project is *done* by me
