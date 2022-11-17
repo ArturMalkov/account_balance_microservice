@@ -23,8 +23,19 @@ Technology Stack:
       'http://127.0.0.1:8000/v1/information/account-balance/2' \
       -H 'accept: application/json'
     
-    Example response:
-    >curl HTTP /1.1 www.pppp.ru
+    Example response body:
+    >[
+        {
+            "user_id": 2,
+            "type": "regular",
+            "balance": 199.99
+         },
+        {
+            "user_id": 2,
+            "type": "reserve",
+            "balance": 0
+        }
+      ]
 
 - Provides user with info on all transactions on his/her accounts (both reserve and regular) - a list of transactions with description on where and why the funds were credited/debited from the account balance is provided. Sorting (by date and amount) and pagination of results are provided as an option
 
