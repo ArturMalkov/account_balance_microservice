@@ -1,7 +1,7 @@
 **Avito Backend 2022 Account Balance Microservice Project**
 
 Technology Stack:
-- Language: **Python (3.10)**
+- Programming Language: **Python (3.10)**
 
 - Web-framework: **FastAPI**
 
