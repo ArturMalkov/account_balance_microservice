@@ -31,7 +31,7 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 1. Provides .csv report with total revenues for each service rendered in the requested period. 
 
 
-**OpenAPI documentation (with Swagger UI)**:
+**OpenAPI documentation (with Swagger UI and more detailed description of API)**:
 >'/docs'
 
 Example requests:
