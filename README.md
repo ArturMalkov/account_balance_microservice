@@ -42,5 +42,5 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 >'/docs'
 
  
-To run the containers:
+**To run the containers**:
 > docker-compose up --build
