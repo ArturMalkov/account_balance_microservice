@@ -30,6 +30,10 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 <ins>Report service - Reports functionality</ins>
 1. Provides .csv report with total revenues for each service rendered in the requested period. 
 
+
+**OpenAPI documentation (with Swagger UI)**:
+>'/docs'
+
 Example requests:
 >curl HTTP /1.1 www.pppp.ru
  
