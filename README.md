@@ -18,7 +18,7 @@ Technology Stack:
 1. Provide user with his/her accounts' (both reserve and regular) info (including balance amount)
 2. Provide user with info on all transactions on his/her accounts (both reserve and regular) - a list of transactions with description on where and why the funds were credited/debited from the account balance is provided. Sorting (by date and amount) and pagination of results are provided as an option.
 
-<ins>Transaction service - Performing Transactions</ins>
+<ins>Transaction service - Transactions functionality</ins>
 1. Money is deposited (using 3rd party services) to the user regular account (*for the first time*) - regular account info is added to the 'user_accounts' table with the funds deposited (reserve account info is added to the 'user_accounts' table as well)
 OR
 Money is deposited (using 3rd party services) to the user regular account (*NOT for the first time*) - deposited funds are added to the balance of an existing regular account
@@ -27,8 +27,8 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 4. Order is cancelled and money is transferred back from user's reserve account to the regular one
 5. Order is delivered and money is transferred from user's reserve account to the company account
 
-<ins>Reporting service - Report for Accounting Department</ins>
-1. CSV report for 
+<ins>Report service - Reports functionality</ins>
+1. Provides link to .csv report with total revenues for each service rendered in the requested period. 
 
 Example requests:
 >curl HTTP /1.1 www.pppp.ru
