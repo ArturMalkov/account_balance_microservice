@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-**Avito Backend 2022 Account Balance Microservice Project - Python version**
-=======
-**Avito Backend 2022 Account Balance Microservice Project - Python version :metal:**
->>>>>>> 8411486d5c69929a446b5d4e7cbf1e873a7ba219
+**Avito Backend 2022 Account Balance Microservice Project - Python version**:metal:
+
 
 Link to the task - https://github.com/avito-tech/internship_backend_2022
 
