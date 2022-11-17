@@ -201,10 +201,16 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 - Provides .csv report with total revenues for each service rendered in the requested period. 
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
-    
-    Example response:
-    >curl HTTP /1.1 www.pppp.ru
+    >curl -X 'GET' \
+        'http://127.0.0.1:8000/v1/reports/consolidated/monthly?year=2022&month=11' \
+        -H 'accept: application/json'
+          
+    Example response headers:
+    > content-disposition: attachment; filename=report_2022-11.csv 
+      content-type: text/csv; charset=utf-8 
+      date: Thu,17 Nov 2022 01:55:08 GMT 
+      server: uvicorn 
+      transfer-encoding: chunked 
 
 
 **OpenAPI documentation (with Swagger UI and more detailed description of API)**:
