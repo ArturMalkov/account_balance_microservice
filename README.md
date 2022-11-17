@@ -141,10 +141,25 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 - Order is delivered and money is transferred from user's reserve account to the company account
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
+    >curl -X 'PATCH' \
+        'http://127.0.0.1:8000/v1/transactions/make-payment' \
+        -H 'accept: application/json' \
+        -H 'Content-Type: application/json' \
+        -d '{
+        "type": "payment to company",
+        "order_id": 1,
+        "to_company_account": 1
+        }'
     
-    Example response:
-    >curl HTTP /1.1 www.pppp.ru
+    Example response body:
+    >{
+        "description": "Money in the amount of 350000USD was paid by user 1 to the company account as per the order 1 on 2022-11-17 01:49:56.228794.",
+        "date": "2022-11-17T01:49:56.232796",
+        "amount": 350000,
+        "type": "payment to company",
+        "order_id": 1,
+        "to_company_account": 1
+    }
     
 <ins>Report service - Reports functionality</ins>
 - Provides .csv report with total revenues for each service rendered in the requested period. 
