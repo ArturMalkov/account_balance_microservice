@@ -24,7 +24,7 @@ from storage.tables import AccountType, OrderStatus, TransactionType
 class TransactionDescription(str, Enum):
     DEPOSIT = "Money in the amount of {amount}USD was deposited to user {to_user_id} from external services on {date}."
     FUNDS_TRANSFER = (
-        "Money in the amount of {amount}USD was transferred from user {from_user_id} to " "user {to_user_id} on {date}."
+        "Money in the amount of {amount}USD was transferred from user {from_user_id} to user {to_user_id} on {date}."
     )
     RESERVE = (
         "Money in the amount of {amount}USD was reserved on user {user_id} reserve account as per the order {order_id} "
