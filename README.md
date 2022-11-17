@@ -16,6 +16,7 @@ Technology Stack:
 
 <ins>Information service - Balances/transactions info</ins>
 - Provides user with his/her accounts' (both reserve and regular) info (including balance amount)
+
 Example request:
 >curl HTTP /1.1 www.pppp.ru
 
