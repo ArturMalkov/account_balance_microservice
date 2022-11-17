@@ -91,3 +91,6 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
  
 **To run the containers**:
 > docker-compose up --build
+
+**To fill the database with test data, use**:
+> /scripts/database_populate.sql
