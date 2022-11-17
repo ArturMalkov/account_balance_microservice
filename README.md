@@ -29,7 +29,7 @@ Technology Stack:
 - Provides user with info on all transactions on his/her accounts (both reserve and regular) - a list of transactions with description on where and why the funds were credited/debited from the account balance is provided. Sorting (by date and amount) and pagination of results are provided as an option
 
     Example request:
-    curl -X 'GET' \
+    >curl -X 'GET' \
       'http://127.0.0.1:8000/v1/information/account-transactions/2?page=1&sort_by_amount=false&sort_by_date=false' \
       -H 'accept: application/json'
     
