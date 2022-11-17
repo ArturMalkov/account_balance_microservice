@@ -1,4 +1,4 @@
-**Avito Backend 2022 Account Balance Microservice Project**
+**Avito Backend 2022 Account Balance Microservice Project - Python version**
 
 Technology Stack:
 - Programming Language: **Python (3.10)**
@@ -10,11 +10,7 @@ Technology Stack:
 - Database: **PostgreSQL**
 
 
-The project is *done* by me
-
-And this text is ***really important***
-
-Example request:
+Example requests:
 >curl HTTP /1.1 www.pppp.ru
  
 To run database migrations:
