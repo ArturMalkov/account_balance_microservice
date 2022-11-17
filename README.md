@@ -46,7 +46,15 @@ Technology Stack:
 Money is deposited (using 3rd party services) to the user regular account (*NOT for the first time*) - deposited funds are added to the balance of an existing regular account
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
+    >curl -X 'PATCH' \
+      'http://127.0.0.1:8000/v1/transactions/deposit' \
+      -H 'accept: application/json' \
+      -H 'Content-Type: application/json' \
+      -d '{
+      "type": "deposit",
+      "amount": 199.99,
+      "to_user_id": 2
+    }'
     
     Example response:
     >curl HTTP /1.1 www.pppp.ru
