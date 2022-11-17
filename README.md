@@ -120,10 +120,23 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 - Order is cancelled and money is transferred back from user's reserve account to the regular one
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
+    >curl -X 'PATCH' \
+        'http://127.0.0.1:8000/v1/transactions/reserve-refund' \
+        -H 'accept: application/json' \
+        -H 'Content-Type: application/json' \
+        -d '{
+        "type": "reserve refund",
+        "order_id": 2
+        }'
     
-    Example response:
-    >curl HTTP /1.1 www.pppp.ru
+    Example response body:
+    >{
+        "description": "Money in the amount of 170000USD was refunded to user 2 account from his/her reserve account as per the order 2 on 2022-11-17 01:46:55.031078.",
+        "date": "2022-11-17T01:46:55.032078",
+        "amount": 170000,
+        "type": "reserve refund",
+        "order_id": 2
+     }
 
 - Order is delivered and money is transferred from user's reserve account to the company account
 
