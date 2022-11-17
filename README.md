@@ -12,6 +12,7 @@ Technology Stack:
 - Database: **PostgreSQL**
 
 
+
 **Project Description**:
 
 <ins>Information service - Balances/transactions info</ins>
