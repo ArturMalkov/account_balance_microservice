@@ -1,5 +1,7 @@
 **Avito Backend 2022 Account Balance Microservice Project - Python version**
 
+Link to the task - https://github.com/avito-tech/internship_backend_2022
+
 Technology Stack:
 - Programming Language: **Python (3.10)**
 
