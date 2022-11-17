@@ -16,7 +16,7 @@ Technology Stack:
 
 <ins>Information service - Balances/transactions info</ins>
 1. Provide user with his/her accounts' (both reserve and regular) info (including balance amount)
-2. Provide user with info on all transactions on his/her accounts (both reserve and regular)
+2. Provide user with info on all transactions on his/her accounts (both reserve and regular) - a list of transactions with description on where and why the funds were credited/debited from the account balance is provided. Sorting (by date and amount) and pagination of results are provided as an option.
 
 <ins>Transaction service - Performing Transactions</ins>
 1. Money is deposited (using 3rd party services) to the user regular account (*for the first time*) - regular account info is added to the 'user_accounts' table with the funds deposited (reserve account info is added to the 'user_accounts' table as well)
