@@ -45,13 +45,7 @@ Technology Stack:
       -H 'accept: application/json'
     
     Example response body:
-    >{
-        "description": "Money in the amount of 199.99USD was deposited to user 2 from external services on 2022-11-17 01:40:55.779889.",
-        "date": "2022-11-17T01:40:55.780889",
-        "amount": 199.99,
-        "type": "deposit",
-        "to_user_id": 2
-     }
+    >
 
 <ins>Transaction service - Transactions functionality</ins>
 - Money is deposited (using 3rd party services) to the user regular account (*for the first time*) - regular account info is added to the 'user_accounts' table with the funds deposited (reserve account info is added to the 'user_accounts' table as well)
@@ -69,8 +63,14 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
       "to_user_id": 2
        }'
     
-    Example response:
-    >curl HTTP /1.1 www.pppp.ru
+    Example response body:
+    >{
+        "description": "Money in the amount of 199.99USD was deposited to user 2 from external services on 2022-11-17 01:40:55.779889.",
+        "date": "2022-11-17T01:40:55.780889",
+        "amount": 199.99,
+        "type": "deposit",
+        "to_user_id": 2
+     }
 
 - Money transfers between users - funds are added to the balance of a to_user and withdrawn from the balance of a from_user
 
