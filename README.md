@@ -61,7 +61,7 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
       "type": "deposit",
       "amount": 199.99,
       "to_user_id": 2
-    }'
+       }'
     
     Example response:
     >curl HTTP /1.1 www.pppp.ru
@@ -69,10 +69,26 @@ Money is deposited (using 3rd party services) to the user regular account (*NOT 
 - Money transfers between users - funds are added to the balance of a to_user and withdrawn from the balance of a from_user
 
     Example request:
-    >curl HTTP /1.1 www.pppp.ru
+    >curl -X 'PATCH' \
+        'http://127.0.0.1:8000/v1/transactions/transfer' \
+        -H 'accept: application/json' \
+        -H 'Content-Type: application/json' \
+        -d '{
+        "type": "funds transfer",
+        "amount": 500,
+        "from_user_id": 1,
+        "to_user_id": 2
+         }'
     
-    Example response:
-    >curl HTTP /1.1 www.pppp.ru
+    Example response body:
+    >{
+        "description": "Money in the amount of 500USD was transferred from user 1 to user 2 on 2022-11-17 01:37:52.240125.",
+        "date": "2022-11-17T01:37:52.240125",
+        "amount": 500,
+        "type": "funds transfer",
+        "from_user_id": 1,
+        "to_user_id": 2
+     }
 
 - Order is placed and money is transferred from user's regular account to the reserve one 
 
