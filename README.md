@@ -19,7 +19,7 @@ Technology Stack:
 - Provides user with his/her accounts' (both reserve and regular) info (including balance amount)
 
     Example request:
-    curl -X 'GET' \
+    >curl -X 'GET' \
       'http://127.0.0.1:8000/v1/information/account-balance/2' \
       -H 'accept: application/json'
     
