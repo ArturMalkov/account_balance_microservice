@@ -22,6 +22,8 @@ from storage.tables import AccountType, OrderStatus, TransactionType
 
 
 class TransactionDescription(str, Enum):
+    # AS: Это поле в ТЗ есть? Вопрос нужно ли это в БД хранить в таком виде?
+    # AS: Второй вопрос нужен ли Enum под это дело и не переместить ли все это дело туда, где оно используется в виде dict'а?
     DEPOSIT = "Money in the amount of {amount}USD was deposited to user {to_user_id} from external services on {date}."
     FUNDS_TRANSFER = (
         "Money in the amount of {amount}USD was transferred from user {from_user_id} to user {to_user_id} on {date}."
@@ -54,6 +56,11 @@ class TransactionsService:
     def deposit_funds_to_account(self, transaction_data: DepositTransactionIn) -> tables.Transaction:
         recipient_account = self._get_or_create_recipient_account_by_user_id(transaction_data.to_user_id)
 
+        # AS: Здесь и ниже: Не берусь критиковать подход, но читается трудновато. 
+        # AS: Особенно то, что нужен отдельный блок prepare db record.
+        # AS: Я бы разбивал на более мелкие кубики. В духе:
+        # AS: 1. sender.send_funds(amount)
+        # AS: 2. recipient.receive_funds(amount)
         self._transfer_funds(
             sender_account=None,
             recipient_account=recipient_account,
@@ -67,6 +74,7 @@ class TransactionsService:
             to_user_id=transaction_data.to_user_id,
         )
 
+        # AS: Я бы здесь делал только commit(), а add'ы вынес во вложенные методы.
         self.db_session.add_all([recipient_account, transaction])
         self.db_session.commit()
 
@@ -97,11 +105,15 @@ class TransactionsService:
         return transaction
 
     def reserve_funds(self, transaction_data: ReserveTransactionIn) -> tables.Transaction:
+        # AS: Название метода в 61 символ это сильно
         self._raise_error_if_order_does_not_exist_or_has_irrelevant_status(
             transaction_data.order_id,
             OrderStatus.NOT_SUBMITTED,
         )
 
+        # AS: Здесь и ниже: Выглядит плохо. 
+        # AS: И с аннотациями тоже не бьется. Возвращается лист, а присваивается tuple.
+        # AS: Во вложенной функции get_users нет сортировки, поэтому порядок может быть любой. Возможен баг.
         (
             regular_account,
             reserve_account,
@@ -219,7 +231,11 @@ class TransactionsService:
         return transaction
 
     def _calculate_transaction_amount(self, order_id: int) -> Decimal:
+        # AS: Зачем так сложно? Если по id надо, то можно get использовать вместо filter.
+        # AS: Нет аннотации тут, и в результате, и ниже их тоже нет. 
         order = self.db_session.query(tables.Order).filter(tables.Order.id == order_id).first()
+        # AS: Можно как-то поэлегнтнее посчитать. Вроде:
+        # AS: sum([item.quantity * item.service.price] for item in order.items)
         transaction_amount = Decimal(0)
 
         for ordered_service in order.items:
@@ -228,6 +244,8 @@ class TransactionsService:
         return transaction_amount
 
     def _get_transaction_by_order_id(self, order_id: int, type_: TransactionType) -> tables.Transaction:
+        # AS: Это эксперементы? .all() - это, конечно, сильно.
+        # AS: Если я правильно понял логику (не факт), то сначала нужен Order, а от него через relationship забрать транзакции.
         transactions = self.db_session.query(tables.Transaction).all()
         transaction = [transaction for transaction in transactions if transaction.order_id == order_id
                        and transaction.type == type_][0]
@@ -253,6 +271,8 @@ class TransactionsService:
             if sender_account.balance < 0:
                 raise ValueError(ExceptionDescription.ACCOUNT_BALANCE_CANNOT_BE_NEGATIVE.value)
         recipient_account.balance += transfer_amount  # TODO: place logging here???
+        # AS: Опционально: Подумать о том, чтобы self.db.session.add() был тут. Это как будто логичнее.
+        # AS: Заодно метод перестанет быть static.
 
     def _get_or_create_recipient_account_by_user_id(
         self,
@@ -262,8 +282,12 @@ class TransactionsService:
         In case of deposit/money transfer transactions, if a recipient user doesn't have an account yet,
         both regular and reserve accounts will be automatically created with zero balance.
         """
+        # AS: Тут не до конца понимаю как это работает с точки зрения бизнес-логики.
+        # AS: Если нет user'а, то exception (точно?), но если есть user, но у него аккаунта, то его создавать?
+        # AS: А не проще сразу создавать user'а с аккаунтами? Или тут какие-то спец требования есть?
         self.information_service._raise_error_if_user_does_not_exist(user_id)
 
+        # AS: Ну, тут как обычно, я бы делал все на релейшеншипах, но чисто вопрос выбранного подхода.
         regular_account = (
             self.db_session.query(tables.UserAccount)
             .filter(
@@ -312,12 +336,14 @@ class TransactionsService:
         description_template = TransactionDescription[f"{transaction_type.name}"].value
         date = datetime.utcnow()
 
+        # AS: Для сейчас pattern matching для таких кейсов использую
         if transaction_type == TransactionType.DEPOSIT:
             transaction_description = description_template.format(amount=amount, to_user_id=to_user_id, date=date)
         elif transaction_type == TransactionType.FUNDS_TRANSFER:
             transaction_description = description_template.format(
                 amount=amount, from_user_id=from_user_id, to_user_id=to_user_id, date=date
             )
+        # AS: Некрасиво
         elif transaction_type in [
             TransactionType.RESERVE,
             TransactionType.RESERVE_REFUND,
@@ -342,6 +368,7 @@ class TransactionsService:
          for 'reserve' transaction to happen, order must be in 'not submitted' state;
          for 'reserve refund' or 'payment to company' transaction to happen, order must be in 'in progress' state.
         """
+        # AS: Зачем так сложно? Если по id надо, то можно get использовать вместо filter.
         order = self.db_session.query(tables.Order).filter(tables.Order.id == order_id).first()
         if not order:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

@@ -24,6 +24,8 @@ router = APIRouter(
 )
 
 
+# AS: Тут создается транзакция и делается апдейт баланса получателя (к балансу на аккаунте отдельные комменты)
+# AS: Как по мне это точно POST, а не PATCH (тем более, что это все происходит в домене Транзакции).
 @router.patch("/deposit", response_model=DepositTransactionOut)
 def deposit_funds_to_account(
     transaction_data: DepositTransactionIn,
@@ -38,6 +40,9 @@ def deposit_funds_to_account(
     return transactions_service.deposit_funds_to_account(transaction_data)
 
 
+# AS: Аналогично, для меня это POST.
+# AS: Так как переводы бывают людям и компаниям, то я бы их группировал по такому признаку в духе:
+# AS: "/transfer/c2c", "/transfer/c2b", etc
 @router.patch("/transfer", response_model=FundsTransferTransactionOut)
 def transfer_funds_between_user_accounts(
     transaction_data: FundsTransferTransactionIn,
@@ -68,6 +73,7 @@ def reserve_funds(
     return transactions_service.reserve_funds(transaction_data)
 
 
+# AS: Вопрос к имени пути и имени функции. Немного неоднородно и сбивает с мысли.
 @router.patch("/reserve-refund", response_model=ReserveRefundTransactionOut)
 def cancel_reserve(
     transaction_data: ReserveRefundTransactionIn,
@@ -81,6 +87,9 @@ def cancel_reserve(
     return transactions_service.cancel_reserve(transaction_data)
 
 
+# AS: Аналогично, для меня это POST.
+# AS: Так как переводы бывают людям и компаниям, то я бы их группировал по такому признаку в духе:
+# AS: "/transfer/c2c", "/transfer/c2b", etc
 @router.patch("/make-payment", response_model=PaymentTransactionOut)
 def make_payment_to_company(
     transaction_data: PaymentTransactionIn,
