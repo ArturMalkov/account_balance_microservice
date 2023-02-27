@@ -12,9 +12,13 @@ from storage.database import engine
 Base = declarative_base()
 
 
+# AS: Здесь и далее. Я использую стандарт нейминга сущностей БД.
+# AS: https://www.isbe.net/documents/sql_server_standards.pdf 
+# AS: Хотя, как я понимаю, питонисты, которые работают через ORM забивают на такие вещи.
 class User(Base):
     __tablename__ = "users"
 
+    # AS: Здесь и далее. У столбцов отсутствуют аннотации.
     id = sa.Column(sa.Integer, primary_key=True)
     first_name = sa.Column(sa.String(50))
     last_name = sa.Column(sa.String(50))
@@ -22,16 +26,19 @@ class User(Base):
     email = sa.Column(sa.String(50), unique=True, nullable=False)
     phone_number = sa.Column(sa.String(50), unique=True, nullable=False)
 
+    # AS: Здесь и далее. У relationship'ов отсутствуют аннотации. IDE не одобряет.
     accounts = relationship("UserAccount", backref="user", cascade="all, delete")
     orders = relationship("Order", backref="user", cascade="all, delete")
 
     def __repr__(self):
+        # AS: Здесь и далее. Очень длинный repr. Для отладки такой не нужен. И даже если вдруг нужен, то лучше использовать reprlib.
         return (
             f"<{self.__class__.__name__} id={self.id} first_name={self.first_name} last_name={self.last_name}"
             f"username={self.username} email={self.email} phone_number={self.phone_number}>"
         )
 
 
+# AS: Я бы сложил все Enum'ы в отдельный файл и не мешал их в один файл с таблицами
 class AccountType(str, Enum):
     REGULAR = "regular"
     RESERVE = "reserve"
@@ -41,8 +48,13 @@ class UserAccount(Base):
     __tablename__ = "user_accounts"
 
     id = sa.Column(sa.Integer, primary_key=True)
+    # AS: Сам грешу тем же, но называть стобец type - плохо. Потом штуки типа type(User.type) разгребать.
     type = sa.Column(pgEnum(AccountType), nullable=False)
+    # AS: Тут один из самых важных архитектурных вопросов для меня. Должен ли у аккаунта хранится баланс?
+    # AS: Мой ответ одназначный - нет, не должен. И насколько я знаю почти никто его не хранит в таком виде.
+    # AS: Тут можно рассуждать, но риски неконсистентности высокие. Бэст прэктиз - собирать динамически.
     balance = sa.Column(DECIMAL, default=0)
+    # AS: Здесь и далее. Если есть foreign key, то логично и relationship делать.
     user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"), index=True)
 
     def __repr__(self):
@@ -65,6 +77,7 @@ class CompanyAccount(Base):
 
 
 class OrderStatus(str, Enum):
+    # AS: Злесь и далее. Я бы не использовал значения с пробелами
     NOT_SUBMITTED = "not submitted"
     IN_PROGRESS = "in progress"  # money can be transferred from regular account to reserve account (of the same user)
     COMPLETED = "completed"  # money can be withdrawn from reserve account and credited to company account
@@ -76,6 +89,7 @@ class Order(Base):
 
     id = sa.Column(sa.Integer, primary_key=True)
     status = sa.Column(pgEnum(OrderStatus), default=OrderStatus.NOT_SUBMITTED)
+    # AS: Почему тут на 3 строки разъехалось?
     user_id = sa.Column(
         sa.Integer, sa.ForeignKey("users.id"), index=True
     )
@@ -97,6 +111,7 @@ class OrderItem(Base):
     service_id = sa.Column(sa.Integer, sa.ForeignKey("services.id"), index=True)
     order_id = sa.Column(sa.Integer, sa.ForeignKey("orders.id"), index=True)
 
+    # AS: Почему тут unique constrains в table args, если сверху (например в User) они были просто в колонках?
     __table_args__ = (
         sa.UniqueConstraint('service_id', 'order_id'),
         sa.CheckConstraint('quantity > 0'),
@@ -143,7 +158,9 @@ class Transaction(Base):
     amount = sa.Column(DECIMAL)
     type = sa.Column(pgEnum(TransactionType), nullable=False)
     description = sa.Column(sa.String(255), nullable=False)
+    # AS: Тут я бы сделал более точный нейминг. Дата чего? Дата создания. Еще, например, может быть дата изменения.
     date = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)
+    # AS: Вопрос по nullable, но это уже тонкости реализации
     order_id = sa.Column(
         sa.Integer,
         sa.ForeignKey("orders.id"),

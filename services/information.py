@@ -18,6 +18,10 @@ class InformationService:
     def __init__(self, db_session: Session = Depends(get_db_session)):
         self.db_session = db_session
 
+    # AS: Продублирую из tables.
+    # AS: Тут один из самых важных архитектурных вопросов для меня. Должен ли у аккаунта хранится баланс?
+    # AS: Мой ответ одназначный - нет, не должен. И насколько я знаю почти никто его не хранит в таком виде.
+    # AS: Тут можно рассуждать, но риски неконсистентности высокие. Бэст прэктиз - собирать динамически.
     def get_account_balance_info(self, user_id: int) -> list[UserAccountOut]:
         """
         Returns info on user's regular and reserve accounts.
@@ -27,6 +31,8 @@ class InformationService:
 
         return [regular_account_balance_info, reserve_account_balance_info]
 
+    # AS: Вопрос (я сам не знаю) стоит ли дублировать в функции, которую вызывает fastapi, значения по умолчанию?
+    # AS: В такой случае придется в случае чего придется их править в двух местах, а значит можно накосячить.
     def get_account_transactions_info(
         self,
         user_id: int,
@@ -49,6 +55,9 @@ class InformationService:
 
         user_orders_ids = [order.id for order in user.orders]
 
+        # AS: Как я понимаю, тут ты целенаправленно не успользуешь relationship'ы, как выше?
+        # AS: В целом, в рамках того, как реализовано, это ок
+        # AS: Но relationship'ы такая крутая и удобная штука, что я их стараюсь использовать по максимуму
         account_transactions = self.db_session.query(
             tables.Transaction)\
             .filter(
@@ -64,6 +73,7 @@ class InformationService:
                 content={"message": MessageDescription.NO_TRANSACTIONS_AVAILABLE.value}
             )
 
+        # AS: Я бы сортировки делал в рамках одной функции
         if sort_by_date:
             account_transactions = self._sort_rows_by_date_column(tables.Transaction, account_transactions)
 
@@ -83,6 +93,9 @@ class InformationService:
         """
         Returns account of a specified type (regular/reserve) of a particular user.
         """
+        # AS: Вроде это лишний вызов (и сама функция лишняя, как по мне).
+        # AS: Ты фактически делаешь два обращения к БД там, где достаточно одного.
+        # AS: Можно просто убрать эту строку и ничего не поменяется (проверка есть ниже).
         self._raise_error_if_user_does_not_exist(user_id)
 
         account = (
@@ -96,6 +109,12 @@ class InformationService:
             .first()
         )
         if not account:
+            # AS: Подобные блоки много раз повторяются.
+            # AS: Я бы: 1. либо создал отдельные экспешены
+            # AS: 2. Либо сделал под это дело декоратор (если возможно)
+            # AS: 3. Либо в крайнем случае сократил бы 4 строки до 2-х. Т.е. так:
+            # AS: exc_msg = ExceptionDescription.ACCOUNT_DOES_NOT_EXIST.value
+            # AS: HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=exc_msg)
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,  # 422?
                 detail=ExceptionDescription.ACCOUNT_DOES_NOT_EXIST.value,
@@ -119,6 +138,7 @@ class InformationService:
         return user_accounts
 
     def _get_company_account_by_company_account_id(self, company_account_id: int) -> tables.CompanyAccount:
+        # AS: Зачем так сложно? Если по id надо, то можно get использовать вместо filter.
         company_account = self.db_session.query(tables.CompanyAccount)\
             .filter(tables.CompanyAccount.id == company_account_id).first()
 
@@ -136,6 +156,7 @@ class InformationService:
         user = self.db_session.query(tables.User).filter(tables.User.id == user_id).first()
         return user
 
+    # Мне кажется, что эта функция не нужна
     def _raise_error_if_user_does_not_exist(
         self, user_id: int
     ) -> None:

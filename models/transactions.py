@@ -15,6 +15,7 @@ class CompanyAccount(BaseModel):
         orm_mode = True
 
 
+# AS: Нейминг: Чисто вкусовщина, но мне не очень нравятся In/Out. Я за Req/Resp
 class BaseTransactionIn(BaseModel):
     pass
 

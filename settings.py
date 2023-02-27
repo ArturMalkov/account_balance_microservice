@@ -1,3 +1,4 @@
+# AS: Импорты отсортированы некорректно
 from dotenv import load_dotenv
 
 from pydantic import BaseSettings
@@ -7,6 +8,7 @@ load_dotenv()  # do we need it here???
 
 
 class Settings(BaseSettings):
+    # AS: Непонятно зачем тут анотации
     SERVER_HOST: str = "127.0.0.1"
     SERVER_PORT: int = 8000
 
@@ -26,4 +28,6 @@ class Settings(BaseSettings):
     NUMBER_OF_RESULTS_PER_PAGE: int = 5
 
 
+# AS: Не уверен зачем хардокдить кодировку. Может смысл и есть.
+# AS: Но если там будет cp1251, то будет ошибка, а в либе, думаю, есть автоматическая проверка кодировок.
 settings = Settings(_env_file=".env", _env_file_encoding="utf-8")
